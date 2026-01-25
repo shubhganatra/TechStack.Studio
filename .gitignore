@@ -15,7 +15,8 @@ __pycache__/
 *.pyo
 *.pyd
 .pytest_cache/
-
+logs/
+*.log
 # --- Node/Next.js (Frontend) ---
 frontend/node_modules/
 node_modules/

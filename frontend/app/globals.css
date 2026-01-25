@@ -3,3 +3,67 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* System Diagnostics Dashboard Theme - Light & Trustworthy */
+@layer base {
+  :root {
+    /* Primary - Trust & Professional Blue */
+    --color-primary: #0f67cc;
+    --color-primary-light: #e8f1ff;
+    --color-primary-dark: #0a4a9f;
+    
+    /* Secondary - Professional Gray */
+    --color-secondary: #4b5563;
+    --color-secondary-light: #f0f2f5;
+    --color-secondary-border: #d0d5dd;
+    
+    /* Success - Health/Good status */
+    --color-success: #16a34a;
+    --color-success-light: #f0fdf4;
+    
+    /* Warning - Caution */
+    --color-warning: #d97706;
+    --color-warning-light: #fffbeb;
+    
+    /* Error - Alert */
+    --color-error: #dc2626;
+    --color-error-light: #fef2f2;
+    
+    /* Neutral backgrounds */
+    --color-bg-primary: #ffffff;
+    --color-bg-secondary: #f8f9fa;
+    --color-bg-tertiary: #f0f2f5;
+    
+    /* Text */
+    --color-text-primary: #1a202c;
+    --color-text-secondary: #4b5563;
+    --color-text-tertiary: #6b7280;
+  }
+
+  body {
+    @apply bg-white text-gray-900;
+  }
+  
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .diagnostic-card {
+    @apply bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow;
+  }
+  
+  .diagnostic-input {
+    @apply w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition bg-gray-50 hover:bg-white;
+  }
+  
+  .diagnostic-button-primary {
+    @apply px-6 py-3 font-medium rounded-lg transition-all duration-200 inline-flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700 active:scale-95 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .diagnostic-badge {
+    @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium;
+  }
+}
