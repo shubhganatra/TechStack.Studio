@@ -13,7 +13,7 @@ RUN npm ci
 COPY . .
 
 # Build Next.js application with API URL
-ENV NEXT_PUBLIC_API_URL=https://techstack.studio/api
+ENV NEXT_PUBLIC_API_URL=https://techstack.studio
 RUN npm run build
 
 # Production stage
