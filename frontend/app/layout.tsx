@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TechStack.io - System Architecture Generator",
+  title: "TechStack.Studio - System Architecture Generator",
   description: "AI-powered tech stack recommendations for modern applications",
 };
 

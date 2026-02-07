@@ -728,7 +728,7 @@ def debug_system_prompt():
 @app.get("/")
 def home():
     return {
-        "message": "TechStack.io Brain is Active 🧠",
+        "message": "TechStack.Studio Brain is Active 🧠",
         "version": "2.0",
         "features": ["prompt_engineering", "tech_stack_recommendation", "mermaid_diagrams", "logging"]
     }

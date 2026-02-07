@@ -1,0 +1,14 @@
+node_modules
+npm-debug.log
+.git
+.gitignore
+.next
+.venv
+__pycache__
+*.pyc
+.DS_Store
+.env
+.env.local
+.vscode
+.github
+k8s
