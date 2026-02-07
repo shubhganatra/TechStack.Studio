@@ -27,7 +27,6 @@ ENV PATH=/root/.local/bin:$PATH \
 
 # Copy application code
 COPY main.py .
-COPY logs logs
 
 # Create logs directory if it doesn't exist
 RUN mkdir -p logs
