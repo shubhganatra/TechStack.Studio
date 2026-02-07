@@ -12,7 +12,8 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Build Next.js application
+# Build Next.js application with API URL
+ENV NEXT_PUBLIC_API_URL=https://techstack.studio/api
 RUN npm run build
 
 # Production stage
