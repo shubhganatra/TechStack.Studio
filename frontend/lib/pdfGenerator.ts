@@ -477,7 +477,7 @@ export async function generatePDF(data: TechStackData) {
   addTechDetail('Additional Services & Tools', data.primary.additional);
 
   // === ALTERNATIVE STACKS ===
-  if (data.alternatives.length > 0) {
+  if (data.alternatives && data.alternatives.length > 0) {
     data.alternatives.forEach((altStack, index) => {
       doc.addPage();
       currentY = 20;
@@ -584,7 +584,7 @@ export async function generatePDF(data: TechStackData) {
     };
 
     // Create comparison data
-    const stackComparison = [
+    const stackComparison: Array<{ criteria: string; primary: string; alternatives?: string[] }> = [
       { criteria: 'Initial Setup Cost', primary: buildComparisonValue(0, 'Initial Setup Cost') },
       { criteria: 'Development Speed', primary: buildComparisonValue(0, 'Development Speed') },
       { criteria: 'Scalability Potential', primary: buildComparisonValue(0, 'Scalability Potential') },
@@ -594,10 +594,14 @@ export async function generatePDF(data: TechStackData) {
     ];
 
     // Add alternative columns
-    stackComparison.forEach(row => {
+    stackComparison.forEach((row) => {
       row.alternatives = [];
-      for (let i = 1; i <= data.alternatives.length; i++) {
-        row.alternatives.push(buildComparisonValue(i, row.criteria));
+      if (data.alternatives && data.alternatives.length > 0) {
+        for (let i = 1; i <= data.alternatives.length; i++) {
+          if (row.alternatives) {
+            row.alternatives.push(buildComparisonValue(i, row.criteria));
+          }
+        }
       }
     });
 
@@ -609,7 +613,7 @@ export async function generatePDF(data: TechStackData) {
 
     const colWidths = {
       criteria: 45,
-      stack: (pageWidth - margin * 2 - 45) / (1 + data.alternatives.length)
+      stack: (pageWidth - margin * 2 - 45) / (1 + (data.alternatives?.length || 0))
     };
 
     // Draw header row
@@ -628,10 +632,12 @@ export async function generatePDF(data: TechStackData) {
     tableX += colWidths.stack;
 
     // ALTERNATIVE headers
-    for (let i = 0; i < data.alternatives.length; i++) {
-      doc.rect(tableX, currentY, colWidths.stack, headerHeight, 'F');
-      doc.text(`ALT #${i + 1}`, tableX + (colWidths.stack / 2) - 8, headerY);
-      tableX += colWidths.stack;
+    if (data.alternatives) {
+      for (let i = 0; i < data.alternatives.length; i++) {
+        doc.rect(tableX, currentY, colWidths.stack, headerHeight, 'F');
+        doc.text(`ALT #${i + 1}`, tableX + (colWidths.stack / 2) - 8, headerY);
+        tableX += colWidths.stack;
+      }
     }
 
     currentY += headerHeight + 2;
@@ -672,14 +678,16 @@ export async function generatePDF(data: TechStackData) {
       tableX += colWidths.stack;
 
       // Alternative columns
-      row.alternatives.forEach(altValue => {
-        const altLines = doc.splitTextToSize(altValue, colWidths.stack - 4);
-        doc.text(altLines, tableX + 2, currentY + 1);
-        maxRowHeight = Math.max(maxRowHeight, altLines.length * 4);
-        
-        doc.rect(tableX, rowStartY, colWidths.stack, maxRowHeight + 3);
-        tableX += colWidths.stack;
-      });
+      if (row.alternatives) {
+        row.alternatives.forEach(altValue => {
+          const altLines = doc.splitTextToSize(altValue, colWidths.stack - 4);
+          doc.text(altLines, tableX + 2, currentY + 1);
+          maxRowHeight = Math.max(maxRowHeight, altLines.length * 4);
+          
+          doc.rect(tableX, rowStartY, colWidths.stack, maxRowHeight + 3);
+          tableX += colWidths.stack;
+        });
+      }
 
       currentY = rowStartY + maxRowHeight + 3;
     });
