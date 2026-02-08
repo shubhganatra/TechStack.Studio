@@ -389,14 +389,31 @@ export default function Home() {
                         <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-600 text-white text-xs font-bold flex-shrink-0">{idx + 1}</span>
                         <h3 className="font-semibold text-gray-900">Alternative Approach</h3>
                       </div>
-                      <p className="text-sm text-gray-600 leading-relaxed mb-4">
-                        {typeof techStackData.alternative_explanations?.[idx] === 'string' 
-                          ? techStackData.alternative_explanations[idx]
-                          : techStackData.alternative_explanations?.[idx]?.trade_off || 'Trade-off focused approach'}
-                      </p>
+                      
+                      {/* Detailed explanations */}
+                      <div className="space-y-4 mb-4 pb-4 border-b border-gray-300">
+                        {techStackData.alternative_explanations?.[idx]?.when_to_use && (
+                          <div className="text-sm">
+                            <p className="font-medium text-gray-900 text-xs uppercase tracking-wide mb-1">When to Use</p>
+                            <p className="text-gray-600">{techStackData.alternative_explanations[idx].when_to_use}</p>
+                          </div>
+                        )}
+                        {techStackData.alternative_explanations?.[idx]?.trade_off && (
+                          <div className="text-sm">
+                            <p className="font-medium text-gray-900 text-xs uppercase tracking-wide mb-1">Trade-off</p>
+                            <p className="text-gray-600">{techStackData.alternative_explanations[idx].trade_off}</p>
+                          </div>
+                        )}
+                        {techStackData.alternative_explanations?.[idx]?.why_consider && (
+                          <div className="text-sm">
+                            <p className="font-medium text-gray-900 text-xs uppercase tracking-wide mb-1">Why Consider</p>
+                            <p className="text-gray-600">{techStackData.alternative_explanations[idx].why_consider}</p>
+                          </div>
+                        )}
+                      </div>
                       
                       {/* Stack summary */}
-                      <div className="space-y-3 pt-4 border-t border-gray-300">
+                      <div className="space-y-3">
                         {alt.frontend && alt.frontend.length > 0 && (
                           <div className="text-sm">
                             <p className="font-medium text-gray-900 text-xs uppercase tracking-wide mb-1">Frontend</p>

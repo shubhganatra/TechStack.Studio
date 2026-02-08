@@ -93,7 +93,52 @@ system_prompt = """CRITICAL: You MUST provide BOTH the architecture diagram AND 
 Structure your answer EXACTLY as follows:
 
 ## Architecture Diagram
-Provide a Mermaid.js diagram showing the complete system architecture for the PRIMARY recommended stack.
+Provide a Mermaid.js diagram showing the SPECIFIC system architecture using the EXACT technologies you will recommend in the PRIMARY Technology Stack section below. 
+
+⚠️ CRITICAL - THIS IS MANDATORY:
+- EVERY technology mentioned in your "### Frontend", "### Backend", "### Database", "### DevOps/Infrastructure", and "### Additional Services" sections MUST appear in this diagram
+- Use the ACTUAL PRODUCT NAMES you recommend (not generic types)
+  - Example: If you recommend React, write "React[React_Frontend]" NOT "Frontend" or "WebFramework"
+  - Example: If you recommend FastAPI, write "FastAPI[FastAPI_Backend]" NOT "Backend" or "API_Server"
+  - Example: If you recommend PostgreSQL, write "PostgreSQL[(PostgreSQL_DB)]" NOT "Database"
+  - Example: If you recommend Docker, write "Docker[Docker_Containers]" NOT "Containerization"
+
+VALIDATION RULE - Your diagram is INVALID if:
+❌ It uses generic labels: "Database", "Cache", "Backend", "Frontend", "API Gateway", "Message Queue"
+❌ Any recommended technology is missing from the diagram
+❌ It shows technologies not mentioned in your stack recommendations
+✅ Every node name matches a technology you specifically recommend
+
+REQUIRED STRUCTURE:
+Show how specific technologies interact:
+- Your chosen Frontend framework
+- Your chosen Backend framework/language
+- Your chosen Database system
+- Any caching/storage tech you recommend
+- Any message queues/async processing tools you recommend
+- Any containerization/orchestration (if relevant to their budget/scale)
+
+Example (for a small Python/React/PostgreSQL stack):
+graph TD
+    Browser[User_Browser]
+    React[React_App]
+    FastAPI[FastAPI_Server]
+    PostgreSQL[(PostgreSQL_Database)]
+    Render[Render_Hosting]
+    
+    Browser -->|HTTP/Fetch| React
+    React -->|API_Calls| FastAPI
+    FastAPI -->|CRUD_Operations| PostgreSQL
+    FastAPI -->|Deployed_On| Render
+
+CHECKLIST BEFORE SUBMITTING:
+1. Have I included every tech from Frontend section? YES/NO
+2. Have I included every tech from Backend section? YES/NO
+3. Have I included every tech from Database section? YES/NO
+4. Are all node names SPECIFIC product names (not generic)? YES/NO
+5. Does every connection show how specific technologies interact? YES/NO
+
+If answer to ANY is NO, FIX THE DIAGRAM before submitting your response.
 
 ## PRIMARY Technology Stack
 
@@ -115,6 +160,17 @@ Cons:
 • [Specific limitation relative to their budget/timeline]
 Why: [Explain why this is the BEST choice FOR THEIR EXACT SITUATION. Reference their specific inputs: app type, scale, budget, team size, timeline, security level, or stated focus. Be concrete - e.g., "For a solo developer with a tight 2-month deadline, React's component reusability saves critical time" rather than generic statements.]
 
+EXAMPLE Frontend entry:
+**React** - ⚛️
+Pros:
+• Extremely fast development with reusable components - perfect for your 1-2 week timeline
+• Massive ecosystem and community support for AI consumer apps
+• Easy to learn and deploy to Vercel (free tier covers your MVP scale)
+Cons:
+• Requires JavaScript knowledge
+• Not suitable for server-heavy rendering needs
+Why: For a solo developer building an MVP in 1-2 weeks, React is the fastest path to a polished UI. Vercel hosting costs almost nothing for your 1K-10K user scale, keeping you under your $1-5K budget. The component-based approach lets you move fast.
+
 ### Backend
 **Tech_Name** - emoji_or_icon
 Pros:
@@ -126,6 +182,17 @@ Cons:
 • [Specific limitation relative to their team size/experience]
 • [Specific limitation relative to their budget/timeline]
 Why: [Explain why this is the BEST choice FOR THEIR EXACT SITUATION. Reference their specific inputs: app type, scale, budget, team size, timeline, security level, or stated focus. Be concrete about how this serves their particular needs.]
+
+EXAMPLE Backend entry:
+**FastAPI** - 🚀
+Pros:
+• Built-in automatic API documentation - saves you hours of documentation work
+• Incredibly fast performance for your scale with minimal overhead
+• Python is perfect for AI apps since most LLM libraries use Python
+Cons:
+• Less mature than Django/Flask (but more than ready for production)
+• Smaller community than Node.js frameworks
+Why: For an AI consumer app where you want to integrate LLMs quickly with minimal setup time, FastAPI + Python is unbeatable. You can deploy to Railway or Render free tier for your MVP. The async support means you can handle LLM API calls without blocking.
 
 ### Database
 **Tech_Name** - emoji_or_icon
@@ -139,6 +206,17 @@ Cons:
 • [Specific limitation relative to their team/constraints]
 Why: [Explain why this is the BEST choice FOR THEIR EXACT SITUATION. Reference their specific inputs: scale, data type, budget, team size, or stated priorities. Be concrete about how this database solves their particular problem.]
 
+EXAMPLE Database entry:
+**PostgreSQL** - 🐘
+Pros:
+• Free tier on Supabase covers your MVP perfectly (1K-10K users, basic storage)
+• Rock solid - handles any data structure you throw at it
+• Single database handles both user data and AI conversation logs
+Cons:
+• Overkill for simple data models (though not a real issue here)
+• Requires understanding SQL
+Why: Supabase's free PostgreSQL tier is perfect for your budget constraint. You get a real database without paying anything. It can scale if you grow beyond 10K users, so no future migration needed.
+
 ### DevOps/Infrastructure
 **Tech_Name** - emoji_or_icon
 Pros:
@@ -150,6 +228,17 @@ Cons:
 • [Specific limitation relative to their team experience]
 • [Specific limitation relative to their budget/resources]
 Why: [Explain why this is the BEST choice FOR THEIR EXACT SITUATION. Reference their specific inputs: scale, timeline, team size, budget, or operational constraints. Be concrete.]
+
+EXAMPLE DevOps entry:
+**Vercel + Railway** - 🚀
+Pros:
+• Deploy frontend to Vercel (free tier) and backend to Railway (free tier) - literally zero deployment cost
+• One-command deploy from git - no DevOps knowledge needed for a solo developer
+• Automatic scaling and monitoring included
+Cons:
+• Limited to paid plans if you exceed generous free tier quotas
+• Less control than traditional VPS (but you don't need it for MVP)
+Why: As a solo developer on a tight timeline and budget, Vercel + Railway removes all DevOps friction. Push to git and you're live. Their free tiers easily cover your MVP scale of 1K-10K users.
 
 ### Additional Services
 **Tech_Name** - emoji_or_icon
@@ -169,6 +258,7 @@ Provide up to 3 alternative tech stack options with the SAME format as PRIMARY. 
 - Solve the same problem differently
 - Have different trade-offs (e.g., cost vs performance, simplicity vs scalability)
 - Still be cohesive and production-ready
+- INCLUDE A MERMAID DIAGRAM for each alternative showing the specific tech stack (same validation rules as PRIMARY)
 
 FOR EACH ALTERNATIVE, START WITH AN EXPLANATION:
 **When to use this stack:** Explain the specific scenario where this stack is BETTER than PRIMARY for the user's project type and constraints. Reference their business priorities (e.g., "If cost is your absolute priority...", "If you need extreme scalability...", "If you have a more experienced team in X language...").
@@ -176,6 +266,9 @@ FOR EACH ALTERNATIVE, START WITH AN EXPLANATION:
 **Primary trade-off vs recommended stack:** Explain the key difference between this and the PRIMARY recommendation. What are you trading OFF to GAIN with this alternative? (e.g., "Trading development speed for raw performance", "Trading operational simplicity for cost savings")
 
 **Why this option is worth considering:** Briefly explain why this exists in the list - what makes it a viable alternative given their project context?
+
+THEN INCLUDE A DIAGRAM:
+Provide a Mermaid.js diagram showing the architecture of this alternative stack using the SAME RULES as the PRIMARY diagram - show SPECIFIC technology names, not generic boxes.
 
 Then provide the full tech stack with the same format as PRIMARY (### Frontend, ### Backend, etc. with pros/cons/why for each technology).
 
@@ -185,6 +278,11 @@ Use headers like:
 **Primary trade-off vs recommended stack:** [trade-off explanation]
 **Why this option is worth considering:** [context-specific reasoning]
 
+### Architecture Diagram
+```mermaid
+[SPECIFIC tech stack diagram for this alternative]
+```
+
 ### Frontend
 ...
 ### Backend
@@ -192,12 +290,19 @@ Use headers like:
 etc.
 
 ## ALTERNATIVE STACK #2
-[same explanation format]
+[same explanation format with diagram]
 ...
 
 ## ALTERNATIVE STACK #3
-[same explanation format]
+[same explanation format with diagram]
 ...
+
+CRITICAL: The three alternatives MUST be meaningfully different from each other.
+- ALTERNATIVE STACK #1: Optimize for COST (cheapest free/open-source options)
+- ALTERNATIVE STACK #2: Optimize for DEVELOPER EXPERIENCE (fastest development, easiest to learn)
+- ALTERNATIVE STACK #3: Optimize for SCALABILITY (handle 10x or 100x growth, performance-focused)
+
+Each stack should differ substantially in at least 2-3 technology choices. Do NOT repeat the same stack technology-wise.
 
 NOTE: Do NOT suggest multiple options in the same category within a single stack. Pick the BEST option for the given requirements.
 
@@ -494,24 +599,50 @@ def parse_tech_stack_response(response: str) -> RecommendationResponse:
     # Extract alternatives
     alternatives = []
     alternative_explanations = []
-    alt_pattern = r'## ALTERNATIVE STACK #(\d+)\n(.*?)(?=## ALTERNATIVE STACK #\d+|$)'
-    for match in re.finditer(alt_pattern, response, re.DOTALL):
+    # Fixed regex: Allow for text after the number in the header (e.g., ": Cost-Effective MVP")
+    alt_pattern = r'## ALTERNATIVE STACK #(\d+)[:\s][^\n]*\n(.*?)(?=## ALTERNATIVE STACK #\d+|$)'
+    
+    # Debug: Check if response contains ALTERNATIVE STACK markers
+    if '## ALTERNATIVE STACK' in response:
+        print("✓ Response contains ALTERNATIVE STACK markers")
+    else:
+        print("✗ Response MISSING ALTERNATIVE STACK markers!")
+        print(f"  Response content preview:\n{response[-500:]}")
+    
+    alt_matches = list(re.finditer(alt_pattern, response, re.DOTALL))
+    print(f"Found {len(alt_matches)} alternative stacks with improved regex")
+    
+    for match in alt_matches:
         stack_num = int(match.group(1))
         alt_text = match.group(2)
+        
+        print(f"\n=== ALTERNATIVE STACK #{stack_num} ===")
+        print(f"Alt text length: {len(alt_text)}")
+        print(f"Alt text first 200 chars:\n{alt_text[:200]}\n")
         
         # Extract explanation lines
         when_match = re.search(r'\*\*When to use this stack:\*\*\s*(.+?)(?:\n\n|\*\*)', alt_text, re.DOTALL)
         trade_match = re.search(r'\*\*Primary trade-off vs recommended stack:\*\*\s*(.+?)(?:\n\n|\*\*)', alt_text, re.DOTALL)
         why_match = re.search(r'\*\*Why this option is worth considering:\*\*\s*(.+?)(?:\n\n###)', alt_text, re.DOTALL)
         
+        when_text = when_match.group(1).strip() if when_match else ""
+        trade_text = trade_match.group(1).strip() if trade_match else ""
+        why_text = why_match.group(1).strip() if why_match else ""
+        
+        print(f"When to use: {when_text[:100]}")
+        print(f"Trade off: {trade_text[:100]}")
+        print(f"Why consider: {why_text[:100]}\n")
+        
         alternative_explanations.append({
             "stack_num": stack_num,
-            "when_to_use": when_match.group(1).strip() if when_match else "",
-            "trade_off": trade_match.group(1).strip() if trade_match else "",
-            "why_consider": why_match.group(1).strip() if why_match else ""
+            "when_to_use": when_text,
+            "trade_off": trade_text,
+            "why_consider": why_text
         })
         
-        alternatives.append(parse_stack_section(alt_text))
+        alt_stack = parse_stack_section(alt_text)
+        print(f"Parsed alternative #{stack_num}: Frontend={len(alt_stack.frontend)}, Backend={len(alt_stack.backend)}, DB={len(alt_stack.database)}")
+        alternatives.append(alt_stack)
     
     return RecommendationResponse(
         architecture_diagram=diagram,
@@ -523,12 +654,15 @@ def parse_tech_stack_response(response: str) -> RecommendationResponse:
 def parse_stack_section(text: str) -> TechStack:
     """
     Parse a single tech stack section (PRIMARY or ALTERNATIVE)
+    More robust parsing with better error handling
     """
     stack = TechStack()
     lines = text.split('\n')
     current_category = None
     current_tech = None
-    parsing_mode = None  # 'pros', 'cons', or None
+    parsing_mode = None  # 'pros', 'cons', or 'why'
+    
+    print(f"\n=== PARSING STACK SECTION: {len(lines)} lines ===")
     
     for i, line in enumerate(lines):
         line_stripped = line.strip()
@@ -536,18 +670,22 @@ def parse_stack_section(text: str) -> TechStack:
             parsing_mode = None
             continue
         
-        # Skip explanation lines
-        if line_stripped.startswith('**') and any(kw in line_stripped for kw in ['When to use', 'Primary trade-off', 'Why this option']):
+        # Skip explanation lines and examples
+        if any(kw in line_stripped for kw in ['When to use', 'Primary trade-off', 'Why this option', 'EXAMPLE']):
             parsing_mode = None
             continue
         
-        # Detect category
+        # Detect category (###)
         if line_stripped.startswith('### '):
+            # Save previous tech if exists
             if current_tech and current_category:
-                getattr(stack, current_category).append(current_tech)
-                current_tech = None
+                cat_list = getattr(stack, current_category)
+                cat_list.append(current_tech)
+                print(f"  Added {current_tech.name} to {current_category}")
+            current_tech = None
             parsing_mode = None
             
+            # Identify new category
             if 'Frontend' in line_stripped:
                 current_category = 'frontend'
             elif 'Backend' in line_stripped:
@@ -558,83 +696,105 @@ def parse_stack_section(text: str) -> TechStack:
                 current_category = 'devops'
             elif 'Additional' in line_stripped:
                 current_category = 'additional'
+            else:
+                current_category = None
+            
+            if current_category:
+                print(f"  Category: {current_category}")
             continue
         
-        # Extract tech name
+        # Extract tech name - look for **TechName** with dash and emoji/description
         if line_stripped.startswith('**') and ' - ' in line_stripped and current_category:
+            # Save previous tech
             if current_tech and current_category:
-                getattr(stack, current_category).append(current_tech)
+                cat_list = getattr(stack, current_category)
+                cat_list.append(current_tech)
             
-            # Parse: **Tech_Name:** TechName - emoji or **TechName** - emoji
-            match = re.search(r'\*\*Tech_Name:\*\*\s+(.+?)\s+-\s+', line_stripped)
-            if not match:
-                match = re.search(r'\*\*(.+?)\*\*\s*-\s*', line_stripped)
-            
+            # Match: **TechName** - emoji/description
+            match = re.search(r'\*\*([^*]+)\*\*\s*-\s*(.+)$', line_stripped)
             if match:
-                current_tech = TechItem(name=match.group(1).strip())
+                tech_name = match.group(1).strip()
+                current_tech = TechItem(name=tech_name)
                 parsing_mode = None
+                print(f"    Found tech: {tech_name}")
             continue
         
-        # Detect pros section start
+        # Section headers (case-insensitive)
         if line_stripped.lower() == 'pros:' and current_tech:
             parsing_mode = 'pros'
             continue
         
-        # Detect cons section start
         if line_stripped.lower() == 'cons:' and current_tech:
             parsing_mode = 'cons'
             continue
         
-        # Detect why section start
         if line_stripped.lower().startswith('why:') and current_tech:
-            # Could be on same line or next line
-            if line_stripped.lower() == 'why:':
-                parsing_mode = 'why'
-            else:
-                current_tech.why = re.sub(r'^why:\s*', '', line_stripped, flags=re.IGNORECASE).strip()
+            # Extract inline why if exists
+            why_match = re.search(r'^why:\s*(.+)$', line_stripped, re.IGNORECASE)
+            if why_match and why_match.group(1):
+                current_tech.why = why_match.group(1).strip()
                 parsing_mode = None
+            else:
+                parsing_mode = 'why'
             continue
         
-        # Handle bullet points for pros/cons
+        # Example blocks - skip them
+        if 'EXAMPLE' in line_stripped or 'example' in line_stripped:
+            parsing_mode = None
+            continue
+        
+        # Bullet point handling
         if line_stripped.startswith('•') and current_tech:
             bullet_text = line_stripped[1:].strip()
-            # Clean up the text - remove bold markers and trailing commas
-            bullet_text = re.sub(r'\*\*([^*]+)\*\*:\s*', '', bullet_text)  # Remove **title:** prefix
-            bullet_text = re.sub(r',\s*$', '', bullet_text)  # Remove trailing comma
+            # Remove bold markers
+            bullet_text = re.sub(r'\*\*([^*]+)\*\*:\s*', '', bullet_text)
+            # Remove trailing punctuation except period in middle
+            bullet_text = re.sub(r'[,;]\s*$', '', bullet_text)
             bullet_text = bullet_text.strip()
             
-            if parsing_mode == 'pros':
+            if parsing_mode == 'pros' and bullet_text:
                 current_tech.pros.append(bullet_text)
-            elif parsing_mode == 'cons':
+            elif parsing_mode == 'cons' and bullet_text:
                 current_tech.cons.append(bullet_text)
             continue
         
-        # Handle multi-line why
+        # Multi-line why continuation
         if parsing_mode == 'why' and current_tech and line_stripped:
-            if not line_stripped.startswith('###'):
-                current_tech.why += ' ' + line_stripped
-            else:
+            # Stop at next section
+            if line_stripped.startswith('###') or (line_stripped.startswith('**') and ' - ' in line_stripped):
                 parsing_mode = None
-                # Process this line as a category
-                if 'Frontend' in line_stripped:
-                    current_category = 'frontend'
-                elif 'Backend' in line_stripped:
-                    current_category = 'backend'
-                elif 'Database' in line_stripped:
-                    current_category = 'database'
-                elif 'DevOps' in line_stripped or 'Infrastructure' in line_stripped:
-                    current_category = 'devops'
-                elif 'Additional' in line_stripped:
-                    current_category = 'additional'
+                # Re-process this line as new category/tech
+                if line_stripped.startswith('### '):
+                    if 'Frontend' in line_stripped:
+                        current_category = 'frontend'
+                    elif 'Backend' in line_stripped:
+                        current_category = 'backend'
+                    elif 'Database' in line_stripped:
+                        current_category = 'database'
+                    elif 'DevOps' in line_stripped or 'Infrastructure' in line_stripped:
+                        current_category = 'devops'
+                    elif 'Additional' in line_stripped:
+                        current_category = 'additional'
+                    current_tech = None
+                continue
+            # Accumulate why
+            current_tech.why += ' ' + line_stripped
             continue
         
-        # If we hit a new category or tech while in pros/cons, stop collecting
-        if (line_stripped.startswith('###') or line_stripped.startswith('**')) and parsing_mode:
+        # Stop parsing sections when encountering new markers
+        if line_stripped.startswith('###') and parsing_mode:
             parsing_mode = None
     
-    # Don't forget last tech
+    # Don't forget the last tech
     if current_tech and current_category:
-        getattr(stack, current_category).append(current_tech)
+        cat_list = getattr(stack, current_category)
+        cat_list.append(current_tech)
+        print(f"  Added final {current_tech.name} to {current_category}")
+    
+    # Debug output
+    total_techs = len(stack.frontend) + len(stack.backend) + len(stack.database) + len(stack.devops) + len(stack.additional)
+    print(f"  PARSED TOTAL: {total_techs} technologies")
+    print(f"    Frontend: {len(stack.frontend)}, Backend: {len(stack.backend)}, Database: {len(stack.database)}, DevOps: {len(stack.devops)}, Additional: {len(stack.additional)}")
     
     return stack
 
@@ -696,6 +856,11 @@ async def recommend_stack(req: StackRequest):
         print(f"\n=== BACKEND LOG: Full response length: {len(full_response)} ===")
         print(f"=== BACKEND LOG: PRIMARY check: {'## PRIMARY' in full_response} ===")
         print(f"=== BACKEND LOG: MERMAID check: {'```mermaid' in full_response} ===")
+        
+        # Debug: Save raw response to file for inspection
+        with open('last_llm_response.txt', 'w') as f:
+            f.write(full_response)
+        print(f"=== BACKEND LOG: Raw response saved to last_llm_response.txt ===")
         
         # Parse response into structured format
         parsed_response = parse_tech_stack_response(full_response)
