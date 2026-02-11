@@ -37,16 +37,16 @@ rm -rf frontend/.next || true
 rm -rf frontend/node_modules/.cache || true
 rm -rf backend/__pycache__ || true
 rm -rf backend/.pytest_cache || true
-# Archive current logs before cleaning
+# Archive current logs before cleaning (with permission handling)
 if [ -f "backend/logs/visitor_access.log" ]; then
-    mkdir -p backend/logs/archived
-    cp "backend/logs/visitor_access.log" "backend/logs/archived/visitor_access_$(date +%Y%m%d_%H%M%S).log"
-    echo "   📝 Archived visitor logs"
+    mkdir -p backend/logs/archived 2>/dev/null || sudo mkdir -p backend/logs/archived
+    cp "backend/logs/visitor_access.log" "backend/logs/archived/visitor_access_$(date +%Y%m%d_%H%M%S).log" 2>/dev/null || \
+    sudo cp "backend/logs/visitor_access.log" "backend/logs/archived/visitor_access_$(date +%Y%m%d_%H%M%S).log" || true
+    echo "   📝 Archived visitor logs" || true
 fi
-# Keep logs directory but clean old API response logs
-rm -rf backend/logs/stack_recommendation_responses.jsonl || true
-rm -rf backend/logs/migration_recommendation_responses.jsonl || true
-mkdir -p backend/logs
+# Ensure logs directory exists and has proper permissions
+mkdir -p backend/logs 2>/dev/null || sudo mkdir -p backend/logs
+sudo chmod 755 backend/logs 2>/dev/null || true
 
 # 5. Check disk space
 echo -e "${YELLOW}5. Checking disk space...${NC}"
