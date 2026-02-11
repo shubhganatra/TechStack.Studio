@@ -1,0 +1,262 @@
+## Architecture Diagram
+```mermaid
+graph TD
+    Client[Client]
+    APIGateway[NGINX]
+    Backend[FastAPI]
+    DB[(PostgreSQL)]
+    Cache[Redis]
+    Queue[RabbitMQ]
+    
+    Client -->|HTTP_Request| APIGateway
+    APIGateway -->|Route| Backend
+    Backend -->|Query| DB
+    Backend -->|Cache| Cache
+    Backend -->|Publish| Queue
+```
+
+## PRIMARY Technology Stack
+
+### Frontend
+**React** - ⚛️
+Pros:
+• Extremely fast development with reusable components - perfect for your 1-2 week timeline
+• Massive ecosystem and community support for AI consumer apps
+• Easy to learn and deploy to Vercel (free tier covers your MVP scale)
+Cons:
+• Requires JavaScript knowledge
+• Not suitable for server-heavy rendering needs
+Why: For a solo developer building an MVP in 1-2 weeks, React is the fastest path to a polished UI. Vercel hosting costs almost nothing for your 1K-10K user scale, keeping you under your $1-5K budget. The component-based approach lets you move fast.
+
+### Backend
+**FastAPI** - 🚀
+Pros:
+• Built-in automatic API documentation - saves you hours of documentation work
+• Incredibly fast performance for your scale with minimal overhead
+• Python is perfect for AI apps since most LLM libraries use Python
+Cons:
+• Less mature than Django/Flask (but more than ready for production)
+• Smaller community than Node.js frameworks
+Why: For an AI consumer app where you want to integrate LLMs quickly with minimal setup time, FastAPI + Python is unbeatable. You can deploy to Railway or Render free tier for your MVP. The async support means you can handle LLM API calls without blocking.
+
+### Database
+**PostgreSQL** - 🐘
+Pros:
+• Free tier on Supabase covers your MVP perfectly (1K-10K users, basic storage)
+• Rock solid - handles any data structure you throw at it
+• Single database handles both user data and AI conversation logs
+Cons:
+• Overkill for simple data models (though not a real issue here)
+• Requires understanding SQL
+Why: Supabase's free PostgreSQL tier is perfect for your budget constraint. You get a real database without paying anything. It can scale if you grow beyond 10K users, so no future migration needed.
+
+### DevOps/Infrastructure
+**Vercel + Railway** - 🚀
+Pros:
+• Deploy frontend to Vercel (free tier) and backend to Railway (free tier) - literally zero deployment cost
+• One-command deploy from git - no DevOps knowledge needed for a solo developer
+• Automatic scaling and monitoring included
+Cons:
+• Limited to paid plans if you exceed generous free tier quotas
+• Less control than traditional VPS (but you don't need it for MVP)
+Why: As a solo developer on a tight timeline and budget, Vercel + Railway removes all DevOps friction. Push to git and you're live. Their free tiers easily cover your MVP scale of 1K-10K users.
+
+### Additional Services
+**Redis** - 📈
+Pros:
+• Fast caching and data storage for your AI model outputs
+• Easy to integrate with FastAPI for caching
+• Low cost and scalable
+Cons:
+• Limited data persistence (useful for caching, not for long-term storage)
+• Requires Redis knowledge
+Why: Redis is perfect for caching your AI model outputs, which are typically small and fast-changing. It's easy to integrate with FastAPI and scales well.
+
+## ALTERNATIVE STACK #1: Cost-Optimized
+
+**When to use this stack:** If budget is your absolute priority and you're willing to sacrifice some development speed for cost savings.
+
+**Primary trade-off vs recommended stack:** Trading development speed for raw cost savings.
+
+**Why this option is worth considering:** This stack is ideal for projects with extremely tight budgets, where every dollar counts.
+
+### Frontend
+**Preact** - 🚀
+Pros:
+• Extremely lightweight and fast, perfect for small-scale apps
+• Easy to learn and deploy to Vercel (free tier)
+• Smaller bundle size means faster load times
+Cons:
+• Smaller community compared to React
+• Less feature-rich than React
+Why: Preact is the perfect choice for a super-tight budget. It's faster and smaller than React, making it ideal for small-scale apps.
+
+### Backend
+**Django** - 🐍
+Pros:
+• Mature and widely-used framework with a large community
+• Robust security features and authentication
+• Easy to scale and deploy
+Cons:
+• Steeper learning curve compared to FastAPI
+• More overhead due to its ORM and other features
+Why: Django is a great choice for projects with a moderate to large budget. It's more feature-rich than FastAPI and has a larger community, but it's also more complex and expensive.
+
+### Database
+**SQLite** - 📈
+Pros:
+• Zero-cost and easy to set up
+• Fast and lightweight
+• Suitable for small-scale apps
+Cons:
+• Limited scalability and performance
+• Not suitable for large-scale or high-traffic apps
+Why: SQLite is perfect for small-scale apps with a tight budget. It's zero-cost and easy to set up, but it's not suitable for large-scale or high-traffic apps.
+
+### DevOps/Infrastructure
+**Heroku** - 🚀
+Pros:
+• Easy to deploy and scale
+• Automatic monitoring and logging
+• Free tier available
+Cons:
+• Limited control over infrastructure
+• Paid plans can be expensive
+Why: Heroku is a great choice for projects with a tight budget. It's easy to deploy and scale, and it has a free tier available. However, it can be expensive for larger projects.
+
+### Additional Services
+**Memcached** - 📈
+Pros:
+• Fast caching and data storage
+• Easy to integrate with Django
+• Low cost and scalable
+Cons:
+• Limited data persistence (useful for caching, not for long-term storage)
+• Requires Memcached knowledge
+Why: Memcached is perfect for caching your AI model outputs, which are typically small and fast-changing. It's easy to integrate with Django and scales well.
+
+## ALTERNATIVE STACK #2: Developer Experience
+
+**When to use this stack:** If you're a solo developer or a small team with limited experience and want to focus on development speed and ease of use.
+
+**Primary trade-off vs recommended stack:** Trading cost savings for development speed and ease of use.
+
+**Why this option is worth considering:** This stack is ideal for projects where development speed and ease of use are more important than cost savings.
+
+### Frontend
+**Next.js** - 🚀
+Pros:
+• Easy to learn and deploy to Vercel (free tier)
+• Fast and lightweight
+• Built-in support for server-side rendering
+Cons:
+• Smaller community compared to React
+• Less feature-rich than React
+Why: Next.js is a great choice for solo developers or small teams. It's easy to learn and deploy, and it has built-in support for server-side rendering.
+
+### Backend
+**Flask** - 🐍
+Pros:
+• Lightweight and easy to learn
+• Fast and flexible
+• Suitable for small-scale apps
+Cons:
+• Smaller community compared to Django
+• Less feature-rich than Django
+Why: Flask is a great choice for small-scale apps with a tight budget. It's lightweight and easy to learn, but it's not suitable for large-scale or high-traffic apps.
+
+### Database
+**MongoDB** - 📈
+Pros:
+• Fast and scalable
+• Easy to set up and deploy
+• Suitable for large-scale apps
+Cons:
+• Paid plans can be expensive
+• Limited support for complex queries
+Why: MongoDB is a great choice for large-scale apps with a moderate to large budget. It's fast and scalable, but it can be expensive for smaller projects.
+
+### DevOps/Infrastructure
+**AWS** - 🚀
+Pros:
+• Easy to deploy and scale
+• Automatic monitoring and logging
+• Free tier available
+Cons:
+• Limited control over infrastructure
+• Paid plans can be expensive
+Why: AWS is a great choice for projects with a moderate to large budget. It's easy to deploy and scale, and it has a free tier available. However, it can be expensive for larger projects.
+
+### Additional Services
+**Elasticsearch** - 📈
+Pros:
+• Fast and scalable search engine
+• Easy to integrate with Flask
+• Low cost and scalable
+Cons:
+• Limited support for complex queries
+• Requires Elasticsearch knowledge
+Why: Elasticsearch is perfect for search-heavy apps, which are typically large-scale and high-traffic. It's fast and scalable, but it can be expensive for smaller projects.
+
+## ALTERNATIVE STACK #3: Scalability
+
+**When to use this stack:** If you expect your app to grow rapidly and need a scalable infrastructure that can handle high traffic and large user bases.
+
+**Primary trade-off vs recommended stack:** Trading development speed for scalability and performance.
+
+**Why this option is worth considering:** This stack is ideal for projects with high growth expectations and a need for scalability and performance.
+
+### Frontend
+**Angular** - 🚀
+Pros:
+• Fast and scalable
+• Easy to learn and deploy to Vercel (free tier)
+• Built-in support for server-side rendering
+Cons:
+• Smaller community compared to React
+• Less feature-rich than React
+Why: Angular is a great choice for large-scale apps with high growth expectations. It's fast and scalable, but it can be complex and expensive.
+
+### Backend
+**Node.js** - 🐍
+Pros:
+• Fast and scalable
+• Easy to learn and deploy
+• Suitable for large-scale apps
+Cons:
+• Smaller community compared to Django
+• Less feature-rich than Django
+Why: Node.js is a great choice for large-scale apps with high growth expectations. It's fast and scalable, but it can be complex and expensive.
+
+### Database
+**Cassandra** - 📈
+Pros:
+• Fast and scalable
+• Easy to set up and deploy
+• Suitable for large-scale apps
+Cons:
+• Paid plans can be expensive
+• Limited support for complex queries
+Why: Cassandra is a great choice for large-scale apps with high growth expectations. It's fast and scalable, but it can be expensive for smaller projects.
+
+### DevOps/Infrastructure
+**Kubernetes** - 🚀
+Pros:
+• Easy to deploy and scale
+• Automatic monitoring and logging
+• Free tier available
+Cons:
+• Limited control over infrastructure
+• Paid plans can be expensive
+Why: Kubernetes is a great choice for large-scale apps with high growth expectations. It's easy to deploy and scale, and it has a free tier available. However, it can be expensive for larger projects.
+
+### Additional Services
+**Apache Kafka** - 📈
+Pros:
+• Fast and scalable messaging system
+• Easy to integrate with Node.js
+• Low cost and scalable
+Cons:
+• Limited support for complex queries
+• Requires Kafka knowledge
+Why: Apache Kafka is perfect for messaging-heavy apps, which are typically large-scale and high-traffic. It's fast and scalable, but it can be expensive for smaller projects.

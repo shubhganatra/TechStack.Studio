@@ -145,27 +145,27 @@ export default function TechStackDisplay({
     <div>
       {/* Header */}
       <div className="mb-12">
-        <div className="flex justify-between items-end mb-4">
+        <div className="mb-4">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Generated Architecture</h1>
           </div>
-          <div className="flex gap-3">
-            <button
-              onClick={onDownloadPDF}
-              className="btn btn-amber flex items-center gap-2"
-            >
-              <Download size={16} />
-              Download PDF Report
-            </button>
-            <button
-              onClick={onNewStack}
-              className="btn btn-secondary hover:bg-amber-50 hover:border-amber-300"
-            >
-              Generate New Stack
-            </button>
-          </div>
+          <div className="accent-line w-full mb-4"></div>
         </div>
-        <div className="accent-line w-full"></div>
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-3 justify-start sm:justify-start">
+          <button
+            onClick={onDownloadPDF}
+            className="btn btn-amber flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-start"
+          >
+            <Download size={16} />
+            Download PDF Report
+          </button>
+          <button
+            onClick={onNewStack}
+            className="btn btn-secondary hover:bg-amber-50 hover:border-amber-300 w-full sm:w-auto justify-center sm:justify-start"
+          >
+            Generate New Stack
+          </button>
+        </div>
       </div>
 
       {/* Tech Sections */}

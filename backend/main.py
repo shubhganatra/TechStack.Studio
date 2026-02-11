@@ -142,6 +142,8 @@ If answer to ANY is NO, FIX THE DIAGRAM before submitting your response.
 
 ## PRIMARY Technology Stack
 
+⚠️ CRITICAL INSTRUCTION: Do NOT output "[ACTUAL TECHNOLOGY NAME]" literally - REPLACE IT WITH THE REAL TECHNOLOGY NAME (e.g., "React", "FastAPI", "PostgreSQL"). Each tech entry MUST have a real technology name, not a placeholder.
+
 IMPORTANT: Recommend ONE cohesive tech stack that works well together. Choose technologies that:
 - Are proven to work well with each other
 - Match the user's requirements
@@ -149,7 +151,7 @@ IMPORTANT: Recommend ONE cohesive tech stack that works well together. Choose te
 - Are production-ready
 
 ### Frontend
-**Tech_Name** - emoji_or_icon
+**[ACTUAL TECHNOLOGY NAME]** - emoji_or_icon
 Pros:
 • [Specific advantage tied to their app type/scale/budget]
 • [Specific advantage tied to their timeline/team size/focus]
@@ -172,7 +174,7 @@ Cons:
 Why: For a solo developer building an MVP in 1-2 weeks, React is the fastest path to a polished UI. Vercel hosting costs almost nothing for your 1K-10K user scale, keeping you under your $1-5K budget. The component-based approach lets you move fast.
 
 ### Backend
-**Tech_Name** - emoji_or_icon
+**[ACTUAL TECHNOLOGY NAME]** - emoji_or_icon
 Pros:
 • [Specific advantage tied to their app type/scale/budget]
 • [Specific advantage tied to their timeline/team size/focus]
@@ -195,7 +197,7 @@ Cons:
 Why: For an AI consumer app where you want to integrate LLMs quickly with minimal setup time, FastAPI + Python is unbeatable. You can deploy to Railway or Render free tier for your MVP. The async support means you can handle LLM API calls without blocking.
 
 ### Database
-**Tech_Name** - emoji_or_icon
+**[ACTUAL TECHNOLOGY NAME]** - emoji_or_icon
 Pros:
 • [Specific advantage tied to their data/scale needs]
 • [Specific advantage tied to their cost/performance priorities]
@@ -218,7 +220,7 @@ Cons:
 Why: Supabase's free PostgreSQL tier is perfect for your budget constraint. You get a real database without paying anything. It can scale if you grow beyond 10K users, so no future migration needed.
 
 ### DevOps/Infrastructure
-**Tech_Name** - emoji_or_icon
+**[ACTUAL TECHNOLOGY NAME]** - emoji_or_icon
 Pros:
 • [Specific advantage for their deployment/scaling needs]
 • [Specific advantage relative to their budget/operational model]
@@ -241,7 +243,7 @@ Cons:
 Why: As a solo developer on a tight timeline and budget, Vercel + Railway removes all DevOps friction. Push to git and you're live. Their free tiers easily cover your MVP scale of 1K-10K users.
 
 ### Additional Services
-**Tech_Name** - emoji_or_icon
+**[ACTUAL TECHNOLOGY NAME]** - emoji_or_icon
 Pros:
 • [Specific advantage for their primary stack integration]
 • [Specific advantage for their performance/monitoring/caching needs]
