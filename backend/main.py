@@ -1,13 +1,15 @@
 import os
 import re
 import json
+import logging
 from datetime import datetime
 from pathlib import Path
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
+import sys
 
 # LangChain & Groq Imports
 from langchain_groq import ChatGroq
@@ -21,10 +23,50 @@ load_dotenv()
 LOG_DIR = Path("logs")
 LOG_DIR.mkdir(exist_ok=True)
 
-# 3. Setup FastAPI App
+# 3. Setup Structured Logging for Visitor Tracking
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s | %(name)s | %(message)s',
+    handlers=[
+        logging.FileHandler(LOG_DIR / "visitor_access.log"),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+visitor_logger = logging.getLogger("visitor_tracker")
+
+# 4. Setup FastAPI App
 app = FastAPI()
 
-# 4. CORS Setup (Crucial for Next.js to talk to Python)
+# 5. Middleware for Visitor Logging
+@app.middleware("http")
+async def log_visitor_middleware(request: Request, call_next):
+    """
+    Log all HTTP requests with visitor information:
+    - IP address (X-Forwarded-For or remote_addr)
+    - User Agent
+    - Timestamp
+    - Request method and path
+    """
+    # Extract visitor information
+    client_ip = request.headers.get("X-Forwarded-For", request.client.host if request.client else "unknown")
+    user_agent = request.headers.get("User-Agent", "unknown")
+    method = request.method
+    path = request.url.path
+    query_params = str(request.url.query) if request.url.query else ""
+    
+    # Log the visit
+    timestamp = datetime.now().isoformat()
+    log_message = f"IP: {client_ip} | Time: {timestamp} | Method: {method} | Path: {path} | UserAgent: {user_agent}"
+    if query_params:
+        log_message += f" | Query: {query_params}"
+    
+    visitor_logger.info(log_message)
+    
+    # Continue processing request
+    response = await call_next(request)
+    return response
+
+# 6. CORS Setup (Crucial for Next.js to talk to Python)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"], # Only in Dev mode
@@ -33,7 +75,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 5. Setup Groq Models
+# 7. Setup Groq Models
 # Model 1: For generating custom prompts based on user inputs
 prompt_engineer_model = ChatGroq(
     temperature=0.7,  # Higher creativity for prompt generation
@@ -48,7 +90,7 @@ stack_model = ChatGroq(
     api_key=os.getenv("GROQ_API_KEY")
 )
 
-# 6. Logging Function
+# 8. Logging Function for API Responses
 def log_request_response(user_inputs: dict, response: str, model_type: str = "stack", custom_prompt: str = None, master_prompt: str = None):
     """
     Log API requests and responses for learning and analysis
@@ -70,7 +112,7 @@ def log_request_response(user_inputs: dict, response: str, model_type: str = "st
     except Exception as e:
         print(f"Logging error: {e}")
 
-# 7. Prompt Engineering System Prompt
+# 9. Prompt Engineering System Prompt
 prompt_engineer_system = """You are an expert AI architect that generates detailed, contextual prompts for tech stack recommendations.
 
 Given user inputs about their project, generate a prompt that will help another AI make HIGHLY CONTEXTUALIZED tech stack recommendations - not generic ones.

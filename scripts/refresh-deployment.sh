@@ -31,13 +31,22 @@ docker image rm nginx:alpine || true
 echo -e "${YELLOW}3. Pruning Docker system...${NC}"
 docker system prune -af --volumes
 
-# 4. Clean local build artifacts
+# 4. Clean local build artifacts (preserve visitor logs)
 echo -e "${YELLOW}4. Cleaning local build artifacts...${NC}"
 rm -rf frontend/.next || true
 rm -rf frontend/node_modules/.cache || true
 rm -rf backend/__pycache__ || true
 rm -rf backend/.pytest_cache || true
-sudo rm -rf backend/logs/* || rm -rf backend/logs/* || true
+# Archive current logs before cleaning
+if [ -f "backend/logs/visitor_access.log" ]; then
+    mkdir -p backend/logs/archived
+    cp "backend/logs/visitor_access.log" "backend/logs/archived/visitor_access_$(date +%Y%m%d_%H%M%S).log"
+    echo "   📝 Archived visitor logs"
+fi
+# Keep logs directory but clean old API response logs
+rm -rf backend/logs/stack_recommendation_responses.jsonl || true
+rm -rf backend/logs/migration_recommendation_responses.jsonl || true
+mkdir -p backend/logs
 
 # 5. Check disk space
 echo -e "${YELLOW}5. Checking disk space...${NC}"
@@ -69,6 +78,12 @@ echo "   - Backend: $(curl -s http://localhost:8000/ | head -c 50)..."
 echo "   - Frontend: $(curl -s http://localhost:3000/ | head -c 50)..."
 echo "   - Nginx: $(curl -s http://localhost:80/ | head -c 50)..."
 
+# 12. Initialize visitor logging
+echo -e "${YELLOW}12. Initializing visitor logging...${NC}"
+mkdir -p backend/logs
+echo "   📝 Visitor logging directory ready"
+echo "   ✅ Logs will be written to: backend/logs/visitor_access.log"
+
 echo ""
 echo "======================================================================"
 echo -e "${GREEN}✅ Deployment refresh complete!${NC}"
@@ -79,9 +94,10 @@ echo "  1. Open https://techstack.studio in your browser"
 echo "  2. Hard refresh (Cmd+Shift+R on Mac, Ctrl+Shift+R on Windows/Linux)"
 echo "  3. Test the application"
 echo ""
-echo "To view logs:"
-echo "  - All:      docker compose -f docker-compose.prod.yml logs -f"
-echo "  - Backend:  docker compose -f docker-compose.prod.yml logs -f backend"
-echo "  - Frontend: docker compose -f docker-compose.prod.yml logs -f frontend"
-echo "  - Nginx:    docker compose -f docker-compose.prod.yml logs -f nginx"
+echo "View logs and visitor activity:"
+echo "  - All logs:         docker compose -f docker-compose.prod.yml logs -f"
+echo "  - Backend logs:     docker compose -f docker-compose.prod.yml logs -f backend"
+echo "  - Visitor activity: tail -f backend/logs/visitor_access.log"
+echo "  - Live monitoring:  ./scripts/monitor-visitor-logs.sh --live"
+echo "  - Generate report:  ./scripts/analyze-visitor-logs.sh summary"
 echo ""
